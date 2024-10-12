@@ -11,8 +11,6 @@ services:
       - FLASK_APP=backend/app.py
       - FLASK_RUN_HOST=0.0.0.0
     restart: unless-stopped
-    volumes:
-      - ./app:/app
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
       interval: 30s
@@ -22,7 +20,3 @@ services:
 networks:
   default:
     name: tempman_network
-
-volumes:
-  app_data:
-    name: tempman_app_data

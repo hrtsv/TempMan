@@ -26,8 +26,6 @@ services:
       - FLASK_APP=backend/app.py
       - FLASK_RUN_HOST=0.0.0.0
     restart: unless-stopped
-    volumes:
-      - ./app:/app
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
       interval: 30s
@@ -37,10 +35,6 @@ services:
 networks:
   default:
     name: tempman_network
-
-volumes:
-  app_data:
-    name: tempman_app_data
 ```
 
 4. Click on "Create Stack" or the equivalent button in Dockge to deploy the stack.
@@ -61,6 +55,8 @@ If you encounter any issues with the deployment process:
    - Find your stack, click on it, look for the "app" service, and click on the "Logs" button.
 
 2. Common issues and solutions:
+   - If you see "Error: app.py not found in backend directory", check the repository structure and ensure the Flask application file is in the correct location (backend/app.py).
+   - If you see any PostgreSQL-related messages or processes, please report this as an issue, as the application should not be starting PostgreSQL.
    - If the app fails to start, check the Dockerfile and ensure all dependencies are correctly installed.
    - If you can't access the application, ensure that port 5000 is not being used by another service on your system.
 
