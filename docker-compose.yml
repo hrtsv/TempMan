@@ -3,13 +3,18 @@ version: '3.8'
 services:
   tempman:
     build:
-      context: .
-      dockerfile: Dockerfile.backend
-    image: tempman-backend:latest
-    container_name: tempman-backend
+      context: https://github.com/hrtsv/TempMan.git#main
+    image: tempman:latest
+    container_name: tempman
     restart: unless-stopped
     network_mode: host
-    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
