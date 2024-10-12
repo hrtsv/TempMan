@@ -5,8 +5,8 @@ devices:
   - /dev/ipmi0:/dev/ipmi0
   - /dev/nvidia0:/dev/nvidia0
 privileged: true
+environment:
+  - FLASK_APP=app.py
+  - FLASK_RUN_HOST=0.0.0.0
 labels:
-  - "com.github.repo=https://github.com/hrtsv/TempMan.git"
-  - "traefik.enable=true"
-  - "traefik.http.routers.tempman.rule=Host(`tempman.yourdomain.com`)"
-  - "traefik.http.services.tempman.loadbalancer.server.port=5000"
+  - "org.opencontainers.image.source=https://github.com/hrtsv/TempMan.git"
