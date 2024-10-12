@@ -16,17 +16,32 @@ RUN apt-get update && apt-get install -y \
 # Clone the repository
 RUN git clone https://github.com/hrtsv/TempMan.git .
 
+# Debug: Print directory contents
+RUN echo "Contents of /app:" && ls -R /app
+
 # Install Python dependencies
-RUN if [ -f "requirements.txt" ]; then pip install --no-cache-dir -r requirements.txt; \
-    elif [ -f "backend/requirements.txt" ]; then pip install --no-cache-dir -r backend/requirements.txt; \
-    else echo "No requirements.txt found" && exit 1; \
+RUN if [ -f "requirements.txt" ]; then \
+        echo "Installing from root requirements.txt" && \
+        pip install --no-cache-dir -r requirements.txt; \
+    elif [ -f "backend/requirements.txt" ]; then \
+        echo "Installing from backend/requirements.txt" && \
+        pip install --no-cache-dir -r backend/requirements.txt; \
+    elif [ -f "app/backend/requirements.txt" ]; then \
+        echo "Installing from app/backend/requirements.txt" && \
+        pip install --no-cache-dir -r app/backend/requirements.txt; \
+    else \
+        echo "No requirements.txt found" && \
+        exit 1; \
     fi
 
 # Install Node.js dependencies and build the React app
 WORKDIR /app/frontend
-RUN if [ -d "frontend" ]; then cd frontend && npm install && npm run build; \
-    elif [ -f "package.json" ]; then npm install && npm run build; \
-    else echo "No frontend directory or package.json found" && exit 1; \
+RUN if [ -d "frontend" ]; then \
+        cd frontend && npm install && npm run build; \
+    elif [ -f "package.json" ]; then \
+        npm install && npm run build; \
+    else \
+        echo "No frontend directory or package.json found" && exit 1; \
     fi
 
 # Move back to the main directory
