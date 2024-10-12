@@ -2,19 +2,15 @@
 
 TempMan is a Python Flask React JWT app that utilizes IPMI and NVIDIA SMI in a Dockerfile environment.
 
-## Deploying with Docker Compose
+## Deploying with Dockge
 
-To deploy TempMan using Docker Compose, follow these steps:
+To deploy TempMan using Dockge, follow these steps:
 
-1. Ensure you have Docker and Docker Compose installed on your system.
+1. Ensure you have Dockge installed and running on your system.
 
-2. Clone the repository:
-   ```
-   git clone https://github.com/hrtsv/TempMan.git
-   cd TempMan
-   ```
+2. In the Dockge web interface, create a new stack.
 
-3. Create a `docker-compose.yml` file in the root directory with the following content:
+3. When prompted for the docker-compose.yml file, use the following content:
 
 ```yaml
 version: '3.8'
@@ -22,7 +18,7 @@ version: '3.8'
 services:
   app:
     build:
-      context: .
+      context: https://github.com/hrtsv/TempMan.git#main
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
@@ -30,36 +26,46 @@ services:
       - FLASK_APP=backend/app.py
       - FLASK_RUN_HOST=0.0.0.0
     restart: unless-stopped
+    volumes:
+      - ./app:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  default:
+    name: tempman_network
+
+volumes:
+  app_data:
+    name: tempman_app_data
 ```
 
-4. Run the following command to start the service:
+4. Click on "Create Stack" or the equivalent button in Dockge to deploy the stack.
 
-```bash
-docker-compose up -d
-```
+5. Dockge will pull the necessary images, build the app container, and start the service.
 
-5. Once the deployment is complete, you can access the application by opening a web browser and navigating to:
+6. Once the deployment is complete, you can access the application by opening a web browser and navigating to:
 
-   http://localhost:5000
+   http://your-server-ip:5000
+
+   Replace `your-server-ip` with the IP address or hostname of the server running Dockge.
 
 ## Troubleshooting
 
 If you encounter any issues with the deployment process:
 
-1. Check the logs for the app service:
-   ```bash
-   docker-compose logs app
-   ```
+1. Check the logs for the app service in Dockge:
+   - Find your stack, click on it, look for the "app" service, and click on the "Logs" button.
 
 2. Common issues and solutions:
    - If the app fails to start, check the Dockerfile and ensure all dependencies are correctly installed.
    - If you can't access the application, ensure that port 5000 is not being used by another service on your system.
 
 3. If you need to rebuild the container after making changes:
-   ```bash
-   docker-compose down
-   docker-compose up -d --build
-   ```
+   - In Dockge, find your stack and use the "Recreate" option for the app service.
 
 ## Features
 
