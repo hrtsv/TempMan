@@ -1,5 +1,5 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
+# Use a minimal base image
+FROM python:3.9-slim-buster
 
 # Set the working directory in the container
 WORKDIR /app
@@ -7,63 +7,23 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
-    nodejs \
-    npm \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 # Clone the repository
 RUN git clone https://github.com/hrtsv/TempMan.git .
 
-# Debug: Print directory contents
-RUN echo "Contents of /app:" && ls -R /app
-
 # Install Python dependencies
-RUN if [ -f "requirements.txt" ]; then \
-        echo "Installing from root requirements.txt" && \
-        pip install --no-cache-dir -r requirements.txt; \
-    elif [ -f "backend/requirements.txt" ]; then \
-        echo "Installing from backend/requirements.txt" && \
-        pip install --no-cache-dir -r backend/requirements.txt; \
-    elif [ -f "app/backend/requirements.txt" ]; then \
-        echo "Installing from app/backend/requirements.txt" && \
-        pip install --no-cache-dir -r app/backend/requirements.txt; \
-    else \
-        echo "No requirements.txt found" && \
-        exit 1; \
-    fi
-
-# Debug: Print npm version
-RUN npm --version
+RUN pip install --no-cache-dir -r backend/requirements.txt
 
 # Install Node.js dependencies and build the React app
-RUN echo "Current directory: $(pwd)" && \
-    if [ -d "frontend" ]; then \
-        cd frontend; \
-    elif [ -d "app/frontend" ]; then \
-        cd app/frontend; \
-    else \
-        echo "No frontend directory found" && exit 1; \
-    fi && \
-    echo "Contents of frontend directory:" && \
-    ls -la && \
-    npm install && \
-    if [ ! -d "public" ]; then mkdir public; fi && \
-    if [ ! -f "public/index.html" ]; then \
-        echo "<html><body><div id='root'></div></body></html>" > public/index.html; \
-    fi && \
-    if [ ! -d "src" ]; then mkdir src; fi && \
-    if [ ! -f "src/index.js" ]; then \
-        echo "import React from 'react';" > src/index.js && \
-        echo "import ReactDOM from 'react-dom';" >> src/index.js && \
-        echo "import App from './App';" >> src/index.js && \
-        echo "ReactDOM.render(<App />, document.getElementById('root'));" >> src/index.js; \
-    fi && \
-    if [ ! -f "src/App.js" ]; then \
-        echo "import React from 'react';" > src/App.js && \
-        echo "function App() { return <div>Hello, TempMan!</div>; }" >> src/App.js && \
-        echo "export default App;" >> src/App.js; \
-    fi && \
-    npm run build
+WORKDIR /app/frontend
+RUN npm install && npm run build
 
 # Move back to the main directory
 WORKDIR /app
@@ -72,7 +32,7 @@ WORKDIR /app
 EXPOSE 5000
 
 # Set environment variables
-ENV FLASK_APP=app.py
+ENV FLASK_APP=backend/app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
 # Copy the entrypoint script

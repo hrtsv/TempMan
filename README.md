@@ -78,7 +78,7 @@ If you encounter any issues with the deployment process:
    - With Docker Compose: Run `docker-compose logs app`
 
 2. Common issues and solutions:
-   - If you see "No requirements.txt found", check the repository structure and ensure the file exists in the backend directory.
+   - If you see "No module named 'flask'", ensure that the requirements.txt file is present in the backend directory and contains Flask.
    - If you encounter frontend build issues, check the logs to see if the React files were created successfully.
    - If the app can't connect to the database, ensure the `DATABASE_URL` environment variable is correct and the database container is running.
 
