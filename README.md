@@ -23,7 +23,7 @@ To deploy TempMan using Dockge, follow these steps:
 
 ```yaml
 name: tempman
-image: tempman:latest
+image: hrtsv/tempman:latest
 restart: unless-stopped
 ports:
   - 5000:5000
@@ -31,14 +31,13 @@ devices:
   - /dev/ipmi0:/dev/ipmi0
   - /dev/nvidia0:/dev/nvidia0
 privileged: true
-build:
-  context: https://github.com/hrtsv/TempMan.git#main
-  dockerfile: Dockerfile
+labels:
+  - "com.github.repo=https://github.com/hrtsv/TempMan.git"
 ```
 
 3. Click on "Create Stack" or the equivalent button in Dockge to deploy the stack.
 
-4. Dockge will pull the necessary files from GitHub, build the Docker image, and start the container.
+4. Dockge will pull the Docker image and start the container.
 
 ## Accessing the Application
 
@@ -58,8 +57,14 @@ If you encounter any issues with the deployment process:
    - If you can't access the application, ensure that port 5000 is not being used by another service on your system.
    - If IPMI or NVIDIA temperatures are not displayed, ensure that the necessary devices are properly mapped to the container and that you have the required permissions to access them.
 
-3. If you need to rebuild the container after making changes to the GitHub repository:
-   - In Dockge, find your stack and use the "Recreate" option for the tempman container.
+3. If you need to update to the latest version of the application:
+   - In Dockge, find your stack and use the "Pull" option to fetch the latest image.
+   - After pulling, use the "Recreate" option to restart the container with the new image.
+
+## Source Code
+
+The source code for this application is available on GitHub:
+https://github.com/hrtsv/TempMan.git
 
 ## Contributing
 
