@@ -37,8 +37,12 @@ RUN if [ -f "requirements.txt" ]; then \
 # Debug: Print directory contents again
 RUN echo "Contents of /app after Python install:" && ls -R /app
 
+# Debug: Print npm version
+RUN npm --version
+
 # Install Node.js dependencies and build the React app
-RUN if [ -d "frontend" ]; then \
+RUN echo "Current directory: $(pwd)" && \
+    if [ -d "frontend" ]; then \
         cd frontend && \
         echo "Contents of frontend directory:" && \
         ls -la && \
@@ -51,6 +55,8 @@ RUN if [ -d "frontend" ]; then \
         npm install && \
         npm run build; \
     elif [ -f "package.json" ]; then \
+        echo "Contents of directory with package.json:" && \
+        ls -la && \
         npm install && \
         npm run build; \
     else \
