@@ -2,16 +2,12 @@ version: '3.8'
 
 services:
   app:
-    build:
-      context: https://github.com/hrtsv/TempMan.git#main
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
+    image: hrtsv/tempman:latest
     restart: unless-stopped
-    devices:
-      - /dev/ipmi0:/dev/ipmi0
-      - /dev/nvidia0:/dev/nvidia0
-    privileged: true
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_RUN_HOST=0.0.0.0
+      - GITHUB_REPO=https://github.com/hrtsv/TempMan.git
 
 networks:
   default:
