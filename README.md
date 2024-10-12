@@ -12,7 +12,6 @@ TempMan is a simple Python Flask application that monitors IPMI and NVIDIA GPU t
 
 - Dockge installed on your system
 - IPMI and NVIDIA GPU hardware accessible on the host system
-- Traefik (or similar reverse proxy) configured in your Dockge environment
 
 ## Deploying TempMan with Dockge
 
@@ -30,26 +29,24 @@ devices:
   - /dev/ipmi0:/dev/ipmi0
   - /dev/nvidia0:/dev/nvidia0
 privileged: true
+environment:
+  - FLASK_APP=app.py
+  - FLASK_RUN_HOST=0.0.0.0
 labels:
-  - "com.github.repo=https://github.com/hrtsv/TempMan.git"
-  - "traefik.enable=true"
-  - "traefik.http.routers.tempman.rule=Host(`tempman.yourdomain.com`)"
-  - "traefik.http.services.tempman.loadbalancer.server.port=5000"
+  - "org.opencontainers.image.source=https://github.com/hrtsv/TempMan.git"
 ```
 
-3. Replace `tempman.yourdomain.com` with your actual domain or subdomain.
+3. Click on "Create Stack" or the equivalent button in Dockge to deploy the stack.
 
-4. Click on "Create Stack" or the equivalent button in Dockge to deploy the stack.
-
-5. Dockge will pull the Docker image and start the container.
+4. Dockge will pull the Docker image and start the container.
 
 ## Accessing the Application
 
 Once deployed, you can access the application by opening a web browser and navigating to:
 
-http://tempman.yourdomain.com
+http://your-server-ip:5000
 
-Replace `tempman.yourdomain.com` with the domain or subdomain you specified in the Dockge configuration.
+Replace `your-server-ip` with the IP address or hostname of the server running Dockge.
 
 ## Troubleshooting
 
@@ -58,7 +55,7 @@ If you encounter any issues with the deployment process:
 1. Check the logs for the app container in the Dockge interface.
 
 2. Common issues and solutions:
-   - If you can't access the application, ensure that your Traefik configuration is correct and that the domain is properly set up.
+   - If you can't access the application, ensure that port 5000 is not being used by another service on your system.
    - If IPMI or NVIDIA temperatures are not displayed, ensure that the necessary devices are properly mapped to the container and that you have the required permissions to access them.
 
 3. If you need to update to the latest version of the application:
