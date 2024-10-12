@@ -17,7 +17,6 @@ services:
               capabilities: [gpu]
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
       - IPMI_HOST=${IPMI_HOST:-your_ipmi_host}
       - IPMI_USER=${IPMI_USER:-your_ipmi_user}
       - IPMI_PASSWORD=${IPMI_PASSWORD:-your_ipmi_password}
