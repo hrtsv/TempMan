@@ -1,11 +1,12 @@
 name: tempman
 image: hrtsv/tempman:latest
 restart: unless-stopped
-ports:
-  - 5000:5000
 devices:
   - /dev/ipmi0:/dev/ipmi0
   - /dev/nvidia0:/dev/nvidia0
 privileged: true
 labels:
   - "com.github.repo=https://github.com/hrtsv/TempMan.git"
+  - "traefik.enable=true"
+  - "traefik.http.routers.tempman.rule=Host(`tempman.yourdomain.com`)"
+  - "traefik.http.services.tempman.loadbalancer.server.port=5000"
