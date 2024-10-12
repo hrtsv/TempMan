@@ -2,56 +2,26 @@
 
 TempMan is a Python Flask React SQL JWT app that utilizes IPMI and NVIDIA SMI in a Dockerfile environment.
 
-## Quick Start with Docker Compose
+## Quick Start
 
-To run TempMan using Docker Compose, follow these steps:
+To run TempMan using a single command, follow these steps:
 
 1. Ensure Docker and Docker Compose are installed on your system.
 
-2. Save the following `docker-compose.yml` file to your local machine:
-
-```yaml
-version: '3.8'
-
-services:
-  app:
-    build:
-      context: https://github.com/hrtsv/TempMan.git#main
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/ipmi_nvidia_db
-      - JWT_SECRET_KEY=your_secret_key_here
-    depends_on:
-      - db
-
-  db:
-    image: postgres:13
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=ipmi_nvidia_db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
-```
-
-3. Open a terminal, navigate to the directory containing the `docker-compose.yml` file, and run:
+2. Run the following command in your terminal:
 
 ```bash
-docker-compose up -d
+curl -sSL https://raw.githubusercontent.com/hrtsv/TempMan/main/run_tempman.sh | bash
 ```
 
 This command will:
+- Download the necessary files
 - Pull the TempMan repository from GitHub
 - Build the Docker image for the app
 - Pull the PostgreSQL image
 - Create and start containers for both the app and the database
 
-4. Once the containers are running, you can access the application by opening a web browser and navigating to:
+3. Once the script completes, you can access the application by opening a web browser and navigating to:
 
    http://localhost:5000
 
@@ -66,6 +36,22 @@ This command will:
 ## Prerequisites
 
 - Docker and Docker Compose must be installed on your system
+- curl must be installed (comes pre-installed on most systems)
+
+## Manual Setup (if needed)
+
+If you prefer to set up the application manually or the quick start method doesn't work, you can follow these steps:
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/hrtsv/TempMan.git
+   cd TempMan
+   ```
+
+2. Run Docker Compose:
+   ```
+   docker-compose up -d
+   ```
 
 ## Troubleshooting
 
@@ -76,6 +62,12 @@ docker build -t tempman https://github.com/hrtsv/TempMan.git#main
 ```
 
 This will show you the full build output and any potential errors.
+
+If the build is successful, you can run the container with:
+
+```bash
+docker run -d -p 5000:5000 --name tempman tempman
+```
 
 ## Contributing
 
