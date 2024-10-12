@@ -2,22 +2,6 @@
 
 TempMan is a Python Flask React SQL JWT app that utilizes IPMI and NVIDIA SMI in a Dockerfile environment.
 
-## Project Structure
-
-The project should have the following structure:
-
-```
-TempMan/
-├── backend/
-│   ├── app.py
-│   └── requirements.txt
-├── frontend/
-│   └── ... (React app files)
-├── Dockerfile
-├── docker-compose.yml
-└── entrypoint.sh
-```
-
 ## Deploying with Dockge
 
 To deploy TempMan using Dockge, follow these steps:
@@ -61,7 +45,7 @@ volumes:
 
 4. Click on "Create Stack" or the equivalent button in Dockge to deploy the stack.
 
-5. Dockge will pull the necessary images, build the app container, and start the services (including the separate PostgreSQL database).
+5. Dockge will pull the necessary images, build the app container, and start the services.
 
 6. Once the deployment is complete, you can access the application by opening a web browser and navigating to:
 
@@ -73,13 +57,9 @@ volumes:
 
 If you prefer to deploy manually using Docker Compose, follow these steps:
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/hrtsv/TempMan.git
-   cd TempMan
-   ```
+1. Save the above docker-compose.yml content to a file named `docker-compose.yml` in your desired directory.
 
-2. Create a `docker-compose.yml` file in the project root with the content provided above.
+2. Open a terminal and navigate to the directory containing the `docker-compose.yml` file.
 
 3. Run the following command to start the services:
 
@@ -98,10 +78,11 @@ If you encounter any issues with the deployment process:
    - With Docker Compose: Run `docker-compose logs app`
 
 2. Common issues and solutions:
-   - If you see "No module named 'flask'", ensure that the requirements.txt file is present in the backend directory and contains Flask.
+   - If you see "requirements.txt not found", check the repository structure in the logs. The file might be in a different location than expected.
+   - If you see "Frontend directory not found", again, check the repository structure. The frontend files might be in a different location.
+   - If you see "Error: app.py not found", the Flask application file might be in a different location or named differently.
    - If you encounter frontend build issues, check the logs to see if the React files were created successfully.
    - If the app can't connect to the database, ensure the `DATABASE_URL` environment variable is correct and the database container is running.
-   - If you see "can't open file '/app/backend/app.py'", make sure the app.py file is in the backend directory of your project.
 
 3. Ensure that port 5000 is not being used by another service on your system.
 
@@ -119,6 +100,8 @@ If you encounter any issues with the deployment process:
        dockerfile: Dockerfile
      ```
    - Redeploy the stack in Dockge or run `docker-compose up -d` again.
+
+6. If issues persist, you may need to examine the repository structure and update the Dockerfile and entrypoint.sh accordingly. The current setup is designed to be flexible, but it may need adjustments based on the actual structure of the TempMan repository.
 
 ## Features
 
