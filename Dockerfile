@@ -1,21 +1,19 @@
-# Use Alpine Linux as the base image
-FROM python:3.9-alpine
+# Use the default Python image
+FROM python:3.9
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies
-RUN apk add --no-cache \
+# Install system dependencies and remove PostgreSQL
+RUN apt-get update && apt-get install -y \
     git \
     curl \
     nodejs \
     npm \
-    gcc \
-    musl-dev \
-    python3-dev \
-    libffi-dev \
-    openssl-dev \
-    postgresql-dev
+    && apt-get remove -y postgresql postgresql-contrib \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Clone the repository
 RUN git clone https://github.com/hrtsv/TempMan.git .
@@ -32,9 +30,6 @@ RUN npm install && npm run build
 
 # Move back to the main directory
 WORKDIR /app
-
-# Remove unnecessary packages
-RUN apk del gcc musl-dev python3-dev libffi-dev openssl-dev postgresql-dev
 
 # Expose port 5000 for the Flask app
 EXPOSE 5000

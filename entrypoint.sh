@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 echo "Current directory contents:"
@@ -9,6 +9,15 @@ ps aux | grep postgres || echo "No PostgreSQL processes found"
 
 echo "Checking for PostgreSQL-related files:"
 find / -name "*postgres*" 2>/dev/null || echo "No PostgreSQL-related files found"
+
+echo "Checking if PostgreSQL service exists:"
+if systemctl list-unit-files | grep -q postgresql; then
+    echo "PostgreSQL service found. Attempting to stop and disable..."
+    systemctl stop postgresql || true
+    systemctl disable postgresql || true
+else
+    echo "No PostgreSQL service found."
+fi
 
 if [ -f "app.py" ]; then
     echo "Starting Flask application from root directory..."

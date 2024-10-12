@@ -30,7 +30,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:13-alpine
+    image: postgres:13
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
