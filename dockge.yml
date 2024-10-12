@@ -1,7 +1,6 @@
 name: tempman
-image: hrtsv/tempman:latest
-restart: unless-stopped
-environment:
-  - FLASK_APP=app.py
-  - FLASK_RUN_HOST=0.0.0.0
-  - GITHUB_REPO=https://github.com/hrtsv/TempMan.git
+image: tempman
+build:
+  context: https://github.com/hrtsv/TempMan.git#main
+ports:
+  - 5000:5000
