@@ -1,5 +1,5 @@
 name: tempman
-image: tempman:latest
+image: hrtsv/tempman:latest
 restart: unless-stopped
 ports:
   - 5000:5000
@@ -7,6 +7,5 @@ devices:
   - /dev/ipmi0:/dev/ipmi0
   - /dev/nvidia0:/dev/nvidia0
 privileged: true
-build:
-  context: https://github.com/hrtsv/TempMan.git#main
-  dockerfile: Dockerfile
+labels:
+  - "com.github.repo=https://github.com/hrtsv/TempMan.git"
