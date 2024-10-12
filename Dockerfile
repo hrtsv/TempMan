@@ -1,11 +1,19 @@
-# Use Alpine-based Python image
-FROM python:3.9-alpine
+# Use a minimal Python image
+FROM python:3.9-slim-buster
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Install system dependencies
-RUN apk add --no-cache git nodejs npm
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
 
 # Clone the repository
 RUN git clone https://github.com/hrtsv/TempMan.git .

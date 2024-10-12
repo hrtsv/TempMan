@@ -85,7 +85,7 @@ If you encounter any issues with the deployment process:
 3. Common issues and solutions:
    - If you see "app.py not found in root or backend directory", check the repository structure and ensure the Flask application file is in the correct location.
    - If the app can't connect to the database, ensure the `DATABASE_URL` environment variable is correct and the database container is running.
-   - If you encounter frontend build issues, check the logs to see if the React files were created successfully.
+   - If you see multiple PostgreSQL instances starting, ensure that the app container doesn't have PostgreSQL installed. Only the db service should be running PostgreSQL.
 
 4. Ensure that port 5000 is not being used by another service on your system.
 
