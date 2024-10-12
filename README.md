@@ -50,25 +50,15 @@ volumes:
   postgres_data:
 ```
 
-4. Deploy the stack in Dockge.
+4. Click on "Create Stack" or the equivalent button in Dockge to deploy the stack.
 
-5. Once the deployment is complete, you can access the application by opening a web browser and navigating to:
+5. Dockge will pull the necessary images, build the app container, and start the services.
+
+6. Once the deployment is complete, you can access the application by opening a web browser and navigating to:
 
    http://your-server-ip:5000
 
    Replace `your-server-ip` with the IP address or hostname of the server running Dockge.
-
-## Features
-
-- Flask backend with JWT authentication
-- React frontend
-- IPMI and NVIDIA SMI data monitoring
-- Containerized for easy deployment
-- PostgreSQL database integration
-
-## Prerequisites
-
-- Dockge installed and running on your system
 
 ## Troubleshooting
 
@@ -79,43 +69,19 @@ If you encounter any issues with the deployment process:
    - Look for the "app" service and click on the "Logs" button.
    - Review the logs for any error messages or debugging information.
 
-2. Look for the following information in the logs:
-   - The content of the Dockerfile (printed at the start of the logs)
-   - Directory contents at various stages of the build process
-   - Any error messages during the Python or Node.js dependency installation
-   - Frontend build process, including the creation of the public directory and index.html file
+2. Ensure that port 5000 is not being used by another service on your system.
 
-3. Common issues to look out for:
-   - If you see "No requirements.txt found", check the repository structure and ensure the file exists.
-   - If you see "No frontend directory or package.json found", verify the frontend directory structure in the repository.
-   - Check the npm version and any errors during the npm install or build process.
-   - Look for messages about creating the public directory or index.html file.
+3. Verify that the PostgreSQL database is running correctly by checking its logs in Dockge.
 
-4. Ensure that port 5000 is not being used by another service on your system.
+4. If you need to modify the application, you can fork the TempMan repository, make your changes, and then update the `context` in the docker-compose.yml file to point to your forked repository.
 
-5. Verify that the PostgreSQL database is running correctly by checking its logs in Dockge.
+## Features
 
-6. If the frontend build fails, you may need to manually create or modify the index.html file in the repository:
-   - Fork the TempMan repository
-   - Create a `public` directory in the frontend folder if it doesn't exist
-   - Add an `index.html` file with basic content:
-     ```html
-     <html><body><div id='root'></div></body></html>
-     ```
-   - Commit and push these changes to your forked repository
-   - Update the `context` in the docker-compose.yml file to point to your forked repository
-
-If you need to modify the application:
-
-1. Fork the TempMan repository on GitHub.
-2. Make your changes in the forked repository.
-3. Update the `context` in the docker-compose.yml file to point to your forked repository:
-   ```yaml
-   build:
-     context: https://github.com/your-username/TempMan.git#main
-     dockerfile: Dockerfile
-   ```
-4. Redeploy the stack in Dockge with the updated docker-compose.yml file.
+- Flask backend with JWT authentication
+- React frontend
+- IPMI and NVIDIA SMI data monitoring
+- Containerized for easy deployment
+- PostgreSQL database integration
 
 ## Contributing
 
