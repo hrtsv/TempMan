@@ -14,25 +14,11 @@ RUN git clone https://github.com/hrtsv/TempMan.git .
 RUN echo "Contents of /app:" && ls -R
 
 # Install Python dependencies
-RUN if [ -f "requirements.txt" ]; then \
-        pip install --no-cache-dir -r requirements.txt; \
-    elif [ -f "app/requirements.txt" ]; then \
-        pip install --no-cache-dir -r app/requirements.txt; \
-    else \
-        echo "requirements.txt not found"; \
-        exit 1; \
-    fi
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Node.js dependencies and build the React app
 WORKDIR /app/frontend
-RUN if [ -d "frontend" ]; then \
-        cd frontend && npm install && npm run build; \
-    elif [ -d "app/frontend" ]; then \
-        cd app/frontend && npm install && npm run build; \
-    else \
-        echo "Frontend directory not found"; \
-        exit 1; \
-    fi
+RUN npm install && npm run build
 
 # Move back to the main directory
 WORKDIR /app

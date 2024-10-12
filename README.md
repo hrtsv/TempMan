@@ -38,9 +38,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+    command: >
+      -c 'max_connections=200'
+      -c 'shared_buffers=256MB'
 
 volumes:
   postgres_data:
+    name: tempman_postgres_data
 ```
 
 4. Click on "Create Stack" or the equivalent button in Dockge to deploy the stack.
@@ -69,6 +73,27 @@ If you prefer to deploy manually using Docker Compose, follow these steps:
 
 4. Access the application at http://localhost:5000
 
+## Reinitializing the Database
+
+If you need to reinitialize the database (e.g., after schema changes), follow these steps:
+
+1. Stop the running containers:
+   ```bash
+   docker-compose down
+   ```
+
+2. Remove the existing volume:
+   ```bash
+   docker volume rm tempman_postgres_data
+   ```
+
+3. Start the services again:
+   ```bash
+   docker-compose up -d
+   ```
+
+This will create a fresh database volume and reinitialize the database.
+
 ## Troubleshooting
 
 If you encounter any issues with the deployment process:
@@ -77,18 +102,15 @@ If you encounter any issues with the deployment process:
    - In Dockge: Find your stack, click on it, look for the "app" service, and click on the "Logs" button.
    - With Docker Compose: Run `docker-compose logs app`
 
-2. Common issues and solutions:
-   - If you see "requirements.txt not found", check the repository structure in the logs. The file might be in a different location than expected.
-   - If you see "Frontend directory not found", again, check the repository structure. The frontend files might be in a different location.
-   - If you see "Error: app.py not found", the Flask application file might be in a different location or named differently.
-   - If you encounter frontend build issues, check the logs to see if the React files were created successfully.
-   - If the app can't connect to the database, ensure the `DATABASE_URL` environment variable is correct and the database container is running.
-
-3. Ensure that port 5000 is not being used by another service on your system.
-
-4. Verify that the PostgreSQL database is running correctly by checking its logs:
+2. Check the logs for the db service:
    - In Dockge: Look for the "db" service and check its logs.
    - With Docker Compose: Run `docker-compose logs db`
+
+3. Common issues and solutions:
+   - If the app can't connect to the database, ensure the `DATABASE_URL` environment variable is correct and the database container is running.
+   - If you see database-related errors, try reinitializing the database as described above.
+
+4. Ensure that port 5000 is not being used by another service on your system.
 
 5. If you need to modify the application:
    - Fork the TempMan repository on GitHub.
@@ -100,8 +122,6 @@ If you encounter any issues with the deployment process:
        dockerfile: Dockerfile
      ```
    - Redeploy the stack in Dockge or run `docker-compose up -d` again.
-
-6. If issues persist, you may need to examine the repository structure and update the Dockerfile and entrypoint.sh accordingly. The current setup is designed to be flexible, but it may need adjustments based on the actual structure of the TempMan repository.
 
 ## Features
 
