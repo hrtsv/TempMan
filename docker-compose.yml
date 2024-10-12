@@ -25,18 +25,6 @@ services:
     volumes:
       - tempman_data:/data
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.frontend
-    image: tempman-frontend:latest
-    container_name: tempman-frontend
-    restart: unless-stopped
-    ports:
-      - "80:80"  # Adjust if your frontend uses a different port
-    depends_on:
-      - tempman
-
   db:
     image: timescale/timescaledb:latest-pg14
     container_name: tempman_db
@@ -47,6 +35,5 @@ services:
       - tempman_pgdata:/var/lib/postgresql/data
 
 volumes:
-  tempman_app:
   tempman_data:
   tempman_pgdata:
