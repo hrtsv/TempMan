@@ -32,8 +32,7 @@ privileged: true
 environment:
   - FLASK_APP=app.py
   - FLASK_RUN_HOST=0.0.0.0
-labels:
-  - "org.opencontainers.image.source=https://github.com/hrtsv/TempMan.git"
+  - GITHUB_REPO=https://github.com/hrtsv/TempMan.git
 ```
 
 3. Click on "Create Stack" or the equivalent button in Dockge to deploy the stack.
