@@ -67,9 +67,18 @@ volumes:
 
 If you encounter any issues with the deployment process:
 
-1. Check the logs for the app service in Dockge to see if there are any error messages.
-2. Ensure that port 5000 is not being used by another service on your system.
-3. Verify that the PostgreSQL database is running correctly by checking its logs in Dockge.
+1. Check the logs for the app service in Dockge:
+   - In the Dockge interface, find your stack and click on it.
+   - Look for the "app" service and click on the "Logs" button.
+   - Review the logs for any error messages or debugging information.
+
+2. Common issues to look out for:
+   - If you see "No requirements.txt found", check the repository structure and ensure the file exists.
+   - If you see "No frontend directory or package.json found", verify the frontend directory structure in the repository.
+
+3. Ensure that port 5000 is not being used by another service on your system.
+
+4. Verify that the PostgreSQL database is running correctly by checking its logs in Dockge.
 
 If you need to modify the application, you can fork the TempMan repository, make your changes, and then update the `context` in the docker-compose.yml file to point to your forked repository.
 

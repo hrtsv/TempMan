@@ -34,14 +34,30 @@ RUN if [ -f "requirements.txt" ]; then \
         exit 1; \
     fi
 
+# Debug: Print directory contents again
+RUN echo "Contents of /app after Python install:" && ls -R /app
+
 # Install Node.js dependencies and build the React app
-WORKDIR /app/frontend
 RUN if [ -d "frontend" ]; then \
-        cd frontend && npm install && npm run build; \
+        cd frontend && \
+        echo "Contents of frontend directory:" && \
+        ls -la && \
+        npm install && \
+        npm run build; \
+    elif [ -d "app/frontend" ]; then \
+        cd app/frontend && \
+        echo "Contents of app/frontend directory:" && \
+        ls -la && \
+        npm install && \
+        npm run build; \
     elif [ -f "package.json" ]; then \
-        npm install && npm run build; \
+        npm install && \
+        npm run build; \
     else \
-        echo "No frontend directory or package.json found" && exit 1; \
+        echo "No frontend directory or package.json found" && \
+        echo "Contents of current directory:" && \
+        ls -R && \
+        exit 1; \
     fi
 
 # Move back to the main directory
