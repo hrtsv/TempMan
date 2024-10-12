@@ -1,25 +1,20 @@
-# Use official Python image
-FROM python:3.9-slim
+# Use Alpine-based Python image
+FROM python:3.9-alpine
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache git nodejs npm
 
 # Clone the repository
 RUN git clone https://github.com/hrtsv/TempMan.git .
 
+# Print directory contents for debugging
+RUN ls -R
+
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r backend/requirements.txt
 
 # Install Node.js dependencies and build the React app
 WORKDIR /app/frontend
@@ -32,7 +27,7 @@ WORKDIR /app
 EXPOSE 5000
 
 # Set environment variables
-ENV FLASK_APP=app.py
+ENV FLASK_APP=backend/app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
 # Copy the entrypoint script

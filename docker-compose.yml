@@ -3,7 +3,7 @@ version: '3.8'
 services:
   app:
     build:
-      context: .
+      context: https://github.com/hrtsv/TempMan.git#main
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:13
+    image: postgres:13-alpine
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
