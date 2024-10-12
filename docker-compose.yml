@@ -15,6 +15,7 @@ services:
     container_name: tempman
     restart: unless-stopped
     network_mode: host
+    runtime: nvidia
     deploy:
       resources:
         reservations:
