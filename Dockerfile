@@ -9,13 +9,15 @@ RUN apt-get update && apt-get install -y \
     git \
     nodejs \
     npm \
+    postgresql \
+    postgresql-contrib \
     && rm -rf /var/lib/apt/lists/*
 
 # Clone the repository
 RUN git clone https://github.com/hrtsv/TempMan.git .
 
 # Install Python dependencies
-COPY backend/requirements.txt .
+WORKDIR /app/backend
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Node.js dependencies and build the React app
@@ -31,6 +33,17 @@ EXPOSE 5000
 # Set environment variables
 ENV FLASK_APP=backend/app.py
 ENV FLASK_RUN_HOST=0.0.0.0
+ENV DATABASE_URL=postgresql://user:password@localhost:5432/ipmi_nvidia_db
+ENV JWT_SECRET_KEY=your_secret_key_here
 
-# Run the application
-CMD ["python", "backend/app.py"]
+# Create a new PostgreSQL database
+RUN service postgresql start && \
+    su - postgres -c "createdb ipmi_nvidia_db" && \
+    su - postgres -c "psql -c \"ALTER USER postgres WITH PASSWORD 'password';\""
+
+# Copy the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
