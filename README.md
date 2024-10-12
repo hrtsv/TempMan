@@ -2,6 +2,23 @@
 
 TempMan is a Python Flask React SQL JWT app that utilizes IPMI and NVIDIA SMI in a Dockerfile environment.
 
+## Project Structure
+
+Ensure your project has the following structure:
+
+```
+TempMan/
+├── app.py
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── entrypoint.sh
+├── frontend/
+│   └── ... (React app files)
+└── backend/
+    └── ... (Flask app files)
+```
+
 ## Deploying with Dockge
 
 To deploy TempMan using Dockge, follow these steps:
@@ -57,7 +74,7 @@ volumes:
 
 If you prefer to deploy manually using Docker Compose, follow these steps:
 
-1. Save the above docker-compose.yml content to a file named `docker-compose.yml` in your desired directory.
+1. Save the above docker-compose.yml content to a file named `docker-compose.yml` in your project root directory.
 
 2. Open a terminal and navigate to the directory containing the `docker-compose.yml` file.
 
@@ -78,9 +95,10 @@ If you encounter any issues with the deployment process:
    - With Docker Compose: Run `docker-compose logs app`
 
 2. Common issues and solutions:
-   - If you see "No module named 'flask'", ensure that the requirements.txt file is present in the backend directory and contains Flask.
+   - If you see "No module named 'flask'", ensure that the requirements.txt file is present in the root directory and contains Flask.
    - If you encounter frontend build issues, check the logs to see if the React files were created successfully.
    - If the app can't connect to the database, ensure the `DATABASE_URL` environment variable is correct and the database container is running.
+   - If you see "can't open file '/app/app.py'", make sure the app.py file is in the root directory of your project.
 
 3. Ensure that port 5000 is not being used by another service on your system.
 

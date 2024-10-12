@@ -19,7 +19,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
 RUN git clone https://github.com/hrtsv/TempMan.git .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r backend/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Node.js dependencies and build the React app
 WORKDIR /app/frontend
@@ -32,7 +32,7 @@ WORKDIR /app
 EXPOSE 5000
 
 # Set environment variables
-ENV FLASK_APP=backend/app.py
+ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
 # Copy the entrypoint script
