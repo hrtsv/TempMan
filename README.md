@@ -28,13 +28,6 @@ services:
     depends_on:
       - db
     restart: unless-stopped
-    command: |
-      /bin/sh -c '
-      echo "Dockerfile content:";
-      cat Dockerfile;
-      echo "Starting application...";
-      /entrypoint.sh
-      '
 
   db:
     image: postgres:13
@@ -60,24 +53,37 @@ volumes:
 
    Replace `your-server-ip` with the IP address or hostname of the server running Dockge.
 
+## Manual Deployment with Docker Compose
+
+If you prefer to deploy manually using Docker Compose, follow these steps:
+
+1. Save the above docker-compose.yml content to a file named `docker-compose.yml` in your desired directory.
+
+2. Open a terminal and navigate to the directory containing the `docker-compose.yml` file.
+
+3. Run the following command to start the services:
+
+   ```bash
+   docker-compose up -d
+   ```
+
+4. Access the application at http://localhost:5000
+
 ## Troubleshooting
 
 If you encounter any issues with the deployment process:
 
-1. Check the logs for the app service in Dockge:
-   - In the Dockge interface, find your stack and click on it.
-   - Look for the "app" service and click on the "Logs" button.
-   - Review the logs for any error messages or debugging information.
+1. Check the logs for the app service:
+   - In Dockge: Find your stack, click on it, look for the "app" service, and click on the "Logs" button.
+   - With Docker Compose: Run `docker-compose logs app`
 
 2. Common issues and solutions:
    - If you see "No requirements.txt found", check the repository structure and ensure the file exists in the backend directory.
-   - If you encounter frontend build issues:
-     - The Dockerfile is set up to create basic React files if they don't exist. Check the logs to see if these files were created successfully.
-     - If you need to customize the frontend, you may need to fork the repository and modify the frontend files directly.
+   - If you encounter frontend build issues, check the logs to see if the React files were created successfully.
 
 3. Ensure that port 5000 is not being used by another service on your system.
 
-4. Verify that the PostgreSQL database is running correctly by checking its logs in Dockge.
+4. Verify that the PostgreSQL database is running correctly by checking its logs.
 
 5. If you need to modify the application:
    - Fork the TempMan repository on GitHub.
@@ -88,13 +94,7 @@ If you encounter any issues with the deployment process:
        context: https://github.com/your-username/TempMan.git#main
        dockerfile: Dockerfile
      ```
-   - Redeploy the stack in Dockge with the updated docker-compose.yml file.
-
-6. If you're still encountering issues, you can try to build the Docker image manually to see more detailed error messages:
-   ```
-   docker build -t tempman https://github.com/hrtsv/TempMan.git#main
-   ```
-   This will show you the full build output and any potential errors.
+   - Redeploy the stack in Dockge or run `docker-compose up -d` again.
 
 ## Features
 

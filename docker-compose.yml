@@ -13,13 +13,6 @@ services:
     depends_on:
       - db
     restart: unless-stopped
-    command: |
-      /bin/sh -c '
-      echo "Dockerfile content:";
-      cat Dockerfile;
-      echo "Starting application...";
-      /entrypoint.sh
-      '
 
   db:
     image: postgres:13
