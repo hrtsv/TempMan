@@ -45,7 +45,7 @@ volumes:
 
 4. Click on "Create Stack" or the equivalent button in Dockge to deploy the stack.
 
-5. Dockge will pull the necessary images, build the app container, and start the services.
+5. Dockge will pull the necessary images, build the app container, and start the services (including the separate PostgreSQL database).
 
 6. Once the deployment is complete, you can access the application by opening a web browser and navigating to:
 
@@ -105,7 +105,7 @@ If you encounter any issues with the deployment process:
 - React frontend
 - IPMI and NVIDIA SMI data monitoring
 - Containerized for easy deployment
-- PostgreSQL database integration
+- PostgreSQL database integration (as a separate service)
 
 ## Contributing
 
