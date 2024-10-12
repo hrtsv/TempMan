@@ -33,7 +33,7 @@ EXPOSE 5000
 # Set environment variables
 ENV FLASK_APP=backend/app.py
 ENV FLASK_RUN_HOST=0.0.0.0
-ENV DATABASE_URL=postgresql://user:password@localhost:5432/ipmi_nvidia_db
+ENV DATABASE_URL=postgresql://postgres:password@localhost:5432/ipmi_nvidia_db
 ENV JWT_SECRET_KEY=your_secret_key_here
 
 # Create a new PostgreSQL database

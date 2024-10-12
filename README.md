@@ -11,12 +11,11 @@ To run TempMan using a single Docker command, follow these steps:
 2. Run the following command:
 
 ```bash
-docker run -d -p 5000:5000 --name tempman $(docker build -q https://github.com/hrtsv/TempMan.git)
+docker run -d -p 5000:5000 --name tempman $(docker build -q .)
 ```
 
 This command will:
-- Clone the TempMan repository
-- Build the Docker image
+- Build the Docker image using the Dockerfile in the current directory
 - Create and start a container with both the app and the PostgreSQL database
 
 3. Once the container is running, you can access the application by opening a web browser and navigating to:
@@ -40,7 +39,7 @@ This command will:
 If you encounter any issues with the build process, you can try building the Docker image manually to see more detailed error messages:
 
 ```bash
-docker build -t tempman https://github.com/hrtsv/TempMan.git
+docker build -t tempman .
 ```
 
 This will show you the full build output and any potential errors.
