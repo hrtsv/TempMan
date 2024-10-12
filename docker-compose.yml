@@ -1,1 +1,48 @@
- 
+version: '3.8'
+
+services:
+  tempman:
+    build:
+      context: https://github.com/hrtsv/TempMan.git#main
+      dockerfile_inline: |
+        FROM python:3.9
+        WORKDIR /app
+        COPY requirements.txt .
+        RUN pip install --no-cache-dir -r requirements.txt
+        COPY . .
+        CMD ["python", "main.py"]
+    image: tempman:latest
+    container_name: tempman
+    restart: unless-stopped
+    network_mode: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - IPMI_HOST=${IPMI_HOST:-your_ipmi_host}
+      - IPMI_USER=${IPMI_USER:-your_ipmi_user}
+      - IPMI_PASSWORD=${IPMI_PASSWORD:-your_ipmi_password}
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD:-yourpassword}@db:5432/tempman
+    volumes:
+      - tempman_app:/app
+      - tempman_data:/data
+
+  db:
+    image: timescale/timescaledb:latest-pg14
+    container_name: tempman_db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-yourpassword}
+    volumes:
+      - tempman_pgdata:/var/lib/postgresql/data
+
+volumes:
+  tempman_app:
+  tempman_data:
+  tempman_pgdata:
