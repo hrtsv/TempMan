@@ -1,28 +1,22 @@
-# Use the default Python image
-FROM python:3.9
+# Use a minimal Python image
+FROM python:3.9-slim
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies and remove PostgreSQL
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     nodejs \
     npm \
-    && apt-get remove -y postgresql postgresql-contrib \
-    && apt-get autoremove -y \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Clone the repository
 RUN git clone https://github.com/hrtsv/TempMan.git .
 
-# Print directory contents for debugging
-RUN echo "Contents of /app:" && ls -R
-
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r backend/requirements.txt
 
 # Install Node.js dependencies and build the React app
 WORKDIR /app/frontend
@@ -35,7 +29,7 @@ WORKDIR /app
 EXPOSE 5000
 
 # Set environment variables
-ENV FLASK_APP=app.py
+ENV FLASK_APP=backend/app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
 # Copy the entrypoint script
