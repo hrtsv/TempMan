@@ -1,19 +1,21 @@
-# Use a minimal Python image
-FROM python:3.9-slim-buster
+# Use Alpine Linux as the base image
+FROM python:3.9-alpine
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache \
     git \
     curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
+    nodejs \
+    npm \
+    gcc \
+    musl-dev \
+    python3-dev \
+    libffi-dev \
+    openssl-dev \
+    postgresql-dev
 
 # Clone the repository
 RUN git clone https://github.com/hrtsv/TempMan.git .
@@ -30,6 +32,9 @@ RUN npm install && npm run build
 
 # Move back to the main directory
 WORKDIR /app
+
+# Remove unnecessary packages
+RUN apk del gcc musl-dev python3-dev libffi-dev openssl-dev postgresql-dev
 
 # Expose port 5000 for the Flask app
 EXPOSE 5000
