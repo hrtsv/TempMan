@@ -40,40 +40,32 @@ RUN npm --version
 # Install Node.js dependencies and build the React app
 RUN echo "Current directory: $(pwd)" && \
     if [ -d "frontend" ]; then \
-        cd frontend && \
-        echo "Contents of frontend directory:" && \
-        ls -la && \
-        npm install && \
-        if [ ! -d "public" ]; then mkdir public; fi && \
-        if [ ! -f "public/index.html" ]; then \
-            echo "<html><body><div id='root'></div></body></html>" > public/index.html; \
-        fi && \
-        npm run build; \
+        cd frontend; \
     elif [ -d "app/frontend" ]; then \
-        cd app/frontend && \
-        echo "Contents of app/frontend directory:" && \
-        ls -la && \
-        npm install && \
-        if [ ! -d "public" ]; then mkdir public; fi && \
-        if [ ! -f "public/index.html" ]; then \
-            echo "<html><body><div id='root'></div></body></html>" > public/index.html; \
-        fi && \
-        npm run build; \
-    elif [ -f "package.json" ]; then \
-        echo "Contents of directory with package.json:" && \
-        ls -la && \
-        npm install && \
-        if [ ! -d "public" ]; then mkdir public; fi && \
-        if [ ! -f "public/index.html" ]; then \
-            echo "<html><body><div id='root'></div></body></html>" > public/index.html; \
-        fi && \
-        npm run build; \
+        cd app/frontend; \
     else \
-        echo "No frontend directory or package.json found" && \
-        echo "Contents of current directory:" && \
-        ls -R && \
-        exit 1; \
-    fi
+        echo "No frontend directory found" && exit 1; \
+    fi && \
+    echo "Contents of frontend directory:" && \
+    ls -la && \
+    npm install && \
+    if [ ! -d "public" ]; then mkdir public; fi && \
+    if [ ! -f "public/index.html" ]; then \
+        echo "<html><body><div id='root'></div></body></html>" > public/index.html; \
+    fi && \
+    if [ ! -d "src" ]; then mkdir src; fi && \
+    if [ ! -f "src/index.js" ]; then \
+        echo "import React from 'react';" > src/index.js && \
+        echo "import ReactDOM from 'react-dom';" >> src/index.js && \
+        echo "import App from './App';" >> src/index.js && \
+        echo "ReactDOM.render(<App />, document.getElementById('root'));" >> src/index.js; \
+    fi && \
+    if [ ! -f "src/App.js" ]; then \
+        echo "import React from 'react';" > src/App.js && \
+        echo "function App() { return <div>Hello, TempMan!</div>; }" >> src/App.js && \
+        echo "export default App;" >> src/App.js; \
+    fi && \
+    npm run build
 
 # Move back to the main directory
 WORKDIR /app

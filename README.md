@@ -69,11 +69,32 @@ If you encounter any issues with the deployment process:
    - Look for the "app" service and click on the "Logs" button.
    - Review the logs for any error messages or debugging information.
 
-2. Ensure that port 5000 is not being used by another service on your system.
+2. Common issues and solutions:
+   - If you see "No requirements.txt found", check the repository structure and ensure the file exists in the backend directory.
+   - If you encounter frontend build issues:
+     - The Dockerfile is set up to create basic React files if they don't exist. Check the logs to see if these files were created successfully.
+     - If you need to customize the frontend, you may need to fork the repository and modify the frontend files directly.
 
-3. Verify that the PostgreSQL database is running correctly by checking its logs in Dockge.
+3. Ensure that port 5000 is not being used by another service on your system.
 
-4. If you need to modify the application, you can fork the TempMan repository, make your changes, and then update the `context` in the docker-compose.yml file to point to your forked repository.
+4. Verify that the PostgreSQL database is running correctly by checking its logs in Dockge.
+
+5. If you need to modify the application:
+   - Fork the TempMan repository on GitHub.
+   - Make your changes in the forked repository.
+   - Update the `context` in the docker-compose.yml file to point to your forked repository:
+     ```yaml
+     build:
+       context: https://github.com/your-username/TempMan.git#main
+       dockerfile: Dockerfile
+     ```
+   - Redeploy the stack in Dockge with the updated docker-compose.yml file.
+
+6. If you're still encountering issues, you can try to build the Docker image manually to see more detailed error messages:
+   ```
+   docker build -t tempman https://github.com/hrtsv/TempMan.git#main
+   ```
+   This will show you the full build output and any potential errors.
 
 ## Features
 
