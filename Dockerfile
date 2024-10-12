@@ -34,9 +34,6 @@ RUN if [ -f "requirements.txt" ]; then \
         exit 1; \
     fi
 
-# Debug: Print directory contents again
-RUN echo "Contents of /app after Python install:" && ls -R /app
-
 # Debug: Print npm version
 RUN npm --version
 
@@ -47,17 +44,29 @@ RUN echo "Current directory: $(pwd)" && \
         echo "Contents of frontend directory:" && \
         ls -la && \
         npm install && \
+        if [ ! -d "public" ]; then mkdir public; fi && \
+        if [ ! -f "public/index.html" ]; then \
+            echo "<html><body><div id='root'></div></body></html>" > public/index.html; \
+        fi && \
         npm run build; \
     elif [ -d "app/frontend" ]; then \
         cd app/frontend && \
         echo "Contents of app/frontend directory:" && \
         ls -la && \
         npm install && \
+        if [ ! -d "public" ]; then mkdir public; fi && \
+        if [ ! -f "public/index.html" ]; then \
+            echo "<html><body><div id='root'></div></body></html>" > public/index.html; \
+        fi && \
         npm run build; \
     elif [ -f "package.json" ]; then \
         echo "Contents of directory with package.json:" && \
         ls -la && \
         npm install && \
+        if [ ! -d "public" ]; then mkdir public; fi && \
+        if [ ! -f "public/index.html" ]; then \
+            echo "<html><body><div id='root'></div></body></html>" > public/index.html; \
+        fi && \
         npm run build; \
     else \
         echo "No frontend directory or package.json found" && \

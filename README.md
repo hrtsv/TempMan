@@ -83,15 +83,27 @@ If you encounter any issues with the deployment process:
    - The content of the Dockerfile (printed at the start of the logs)
    - Directory contents at various stages of the build process
    - Any error messages during the Python or Node.js dependency installation
+   - Frontend build process, including the creation of the public directory and index.html file
 
 3. Common issues to look out for:
    - If you see "No requirements.txt found", check the repository structure and ensure the file exists.
    - If you see "No frontend directory or package.json found", verify the frontend directory structure in the repository.
    - Check the npm version and any errors during the npm install or build process.
+   - Look for messages about creating the public directory or index.html file.
 
 4. Ensure that port 5000 is not being used by another service on your system.
 
 5. Verify that the PostgreSQL database is running correctly by checking its logs in Dockge.
+
+6. If the frontend build fails, you may need to manually create or modify the index.html file in the repository:
+   - Fork the TempMan repository
+   - Create a `public` directory in the frontend folder if it doesn't exist
+   - Add an `index.html` file with basic content:
+     ```html
+     <html><body><div id='root'></div></body></html>
+     ```
+   - Commit and push these changes to your forked repository
+   - Update the `context` in the docker-compose.yml file to point to your forked repository
 
 If you need to modify the application:
 
