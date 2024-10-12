@@ -42,5 +42,6 @@ services:
       - tempman_pgdata:/var/lib/postgresql/data
 
 volumes:
+  tempman_app:
   tempman_data:
   tempman_pgdata:
