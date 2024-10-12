@@ -12,6 +12,7 @@ services:
       - JWT_SECRET_KEY=your_secret_key_here
     depends_on:
       - db
+    restart: unless-stopped
 
   db:
     image: postgres:13
@@ -21,6 +22,7 @@ services:
       - POSTGRES_DB=ipmi_nvidia_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
 volumes:
   postgres_data:

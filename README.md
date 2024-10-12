@@ -2,28 +2,54 @@
 
 TempMan is a Python Flask React SQL JWT app that utilizes IPMI and NVIDIA SMI in a Dockerfile environment.
 
-## Quick Start
+## Deploying with Dockge
 
-To run TempMan using a single command, follow these steps:
+To deploy TempMan using Dockge, follow these steps:
 
-1. Ensure Docker and Docker Compose are installed on your system.
+1. Ensure you have Dockge installed and running on your system.
 
-2. Run the following command in your terminal:
+2. In the Dockge web interface, create a new stack.
 
-```bash
-curl -sSL https://raw.githubusercontent.com/hrtsv/TempMan/main/run_tempman.sh | bash
+3. When prompted for the docker-compose.yml file, use the following content:
+
+```yaml
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: https://github.com/hrtsv/TempMan.git#main
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/ipmi_nvidia_db
+      - JWT_SECRET_KEY=your_secret_key_here
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=ipmi_nvidia_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
 ```
 
-This command will:
-- Download the necessary files
-- Pull the TempMan repository from GitHub
-- Build the Docker image for the app
-- Pull the PostgreSQL image
-- Create and start containers for both the app and the database
+4. Deploy the stack in Dockge.
 
-3. Once the script completes, you can access the application by opening a web browser and navigating to:
+5. Once the deployment is complete, you can access the application by opening a web browser and navigating to:
 
-   http://localhost:5000
+   http://your-server-ip:5000
+
+   Replace `your-server-ip` with the IP address or hostname of the server running Dockge.
 
 ## Features
 
@@ -35,39 +61,17 @@ This command will:
 
 ## Prerequisites
 
-- Docker and Docker Compose must be installed on your system
-- curl must be installed (comes pre-installed on most systems)
-
-## Manual Setup (if needed)
-
-If you prefer to set up the application manually or the quick start method doesn't work, you can follow these steps:
-
-1. Clone the repository:
-   ```
-   git clone https://github.com/hrtsv/TempMan.git
-   cd TempMan
-   ```
-
-2. Run Docker Compose:
-   ```
-   docker-compose up -d
-   ```
+- Dockge installed and running on your system
 
 ## Troubleshooting
 
-If you encounter any issues with the build process, you can try building the Docker image manually to see more detailed error messages:
+If you encounter any issues with the deployment process:
 
-```bash
-docker build -t tempman https://github.com/hrtsv/TempMan.git#main
-```
+1. Check the logs for the app service in Dockge to see if there are any error messages.
+2. Ensure that port 5000 is not being used by another service on your system.
+3. Verify that the PostgreSQL database is running correctly by checking its logs in Dockge.
 
-This will show you the full build output and any potential errors.
-
-If the build is successful, you can run the container with:
-
-```bash
-docker run -d -p 5000:5000 --name tempman tempman
-```
+If you need to modify the application, you can fork the TempMan repository, make your changes, and then update the `context` in the docker-compose.yml file to point to your forked repository.
 
 ## Contributing
 
