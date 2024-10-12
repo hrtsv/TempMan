@@ -1,6 +1,6 @@
 # TempMan
 
-TempMan is a Python Flask React SQL JWT app that utilizes IPMI and NVIDIA SMI in a Dockerfile environment.
+TempMan is a Python Flask React JWT app that utilizes IPMI and NVIDIA SMI in a Dockerfile environment.
 
 ## Deploying with Docker Compose
 
@@ -27,28 +27,12 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/ipmi_nvidia_db
-      - JWT_SECRET_KEY=your_secret_key_here
-    depends_on:
-      - db
+      - FLASK_APP=backend/app.py
+      - FLASK_RUN_HOST=0.0.0.0
     restart: unless-stopped
-
-  db:
-    image: postgres:13
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=ipmi_nvidia_db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-
-volumes:
-  postgres_data:
-    name: tempman_postgres_data
 ```
 
-4. Run the following command to start the services:
+4. Run the following command to start the service:
 
 ```bash
 docker-compose up -d
@@ -67,28 +51,14 @@ If you encounter any issues with the deployment process:
    docker-compose logs app
    ```
 
-2. Check the logs for the db service:
-   ```bash
-   docker-compose logs db
-   ```
+2. Common issues and solutions:
+   - If the app fails to start, check the Dockerfile and ensure all dependencies are correctly installed.
+   - If you can't access the application, ensure that port 5000 is not being used by another service on your system.
 
-3. Common issues and solutions:
-   - If the app can't connect to the database, ensure the `DATABASE_URL` environment variable is correct and the database container is running.
-   - If you see any PostgreSQL-related processes in the app container, ensure that the Dockerfile and entrypoint.sh are correctly configured to not start PostgreSQL.
-
-4. Ensure that port 5000 is not being used by another service on your system.
-
-5. If you need to rebuild the containers after making changes:
+3. If you need to rebuild the container after making changes:
    ```bash
    docker-compose down
    docker-compose up -d --build
-   ```
-
-6. If you need to reinitialize the database:
-   ```bash
-   docker-compose down
-   docker volume rm tempman_postgres_data
-   docker-compose up -d
    ```
 
 ## Features
@@ -97,7 +67,10 @@ If you encounter any issues with the deployment process:
 - React frontend
 - IPMI and NVIDIA SMI data monitoring
 - Containerized for easy deployment
-- PostgreSQL database integration (as a separate service)
+
+## Database Configuration
+
+This application does not include any database setup or configuration. If your project requires a database, you'll need to set it up separately and update the application code accordingly.
 
 ## Contributing
 
