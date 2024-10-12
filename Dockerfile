@@ -1,3 +1,4 @@
+
 # Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
@@ -15,6 +16,7 @@ RUN apt-get update && apt-get install -y \
 RUN git clone https://github.com/hrtsv/TempMan.git .
 
 # Install Python dependencies
+WORKDIR /app/backend
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Node.js dependencies and build the React app
@@ -28,8 +30,8 @@ WORKDIR /app
 EXPOSE 5000
 
 # Set environment variables
-ENV FLASK_APP=app.py
+ENV FLASK_APP=backend/app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
 # Run the application
-CMD ["python", "app.py"]
+CMD ["python", "backend/app.py"]

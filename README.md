@@ -2,32 +2,55 @@
 
 TempMan is a Python Flask React SQL JWT app that utilizes IPMI and NVIDIA SMI in a Dockerfile environment.
 
-## Quick Start with Docker
+## Quick Start with Docker Compose
 
-To run TempMan using Docker, follow these steps:
+To run TempMan using Docker Compose, follow these steps:
 
-1. Ensure Docker is installed on your system.
-2. Run the following command:
+1. Ensure Docker and Docker Compose are installed on your system.
+2. Save the following `docker-compose.yml` file to your local machine:
 
-```bash
-docker run -d -p 5000:5000 --name tempman $(docker build -q https://github.com/hrtsv/TempMan.git)
+```yaml
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: https://github.com/hrtsv/TempMan.git
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/ipmi_nvidia_db
+      - JWT_SECRET_KEY=your_secret_key_here
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=ipmi_nvidia_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
 ```
 
-This command does the following:
-- Clones the TempMan repository from GitHub
-- Builds the Docker image using the Dockerfile in the repository
-- Creates and runs a container from the newly built image
+3. Open a terminal, navigate to the directory containing the `docker-compose.yml` file, and run:
 
-Command breakdown:
-- `docker build -q https://github.com/hrtsv/TempMan.git`: Builds the Docker image from the GitHub repository
-- `-q`: Outputs only the image ID
-- `$(...)`: Substitutes the output (image ID) into the docker run command
-- `docker run`: Creates and starts a container from the image
-- `-d`: Runs the container in detached mode (in the background)
-- `-p 5000:5000`: Maps port 5000 of the container to port 5000 on the host
-- `--name tempman`: Names the container "tempman" for easy reference
+```bash
+docker-compose up -d
+```
 
-3. Once the container is running, you can access the application by opening a web browser and navigating to:
+This command will:
+- Pull the TempMan repository from GitHub
+- Build the Docker image for the app
+- Pull the PostgreSQL image
+- Create and start containers for both the app and the database
+
+4. Once the containers are running, you can access the application by opening a web browser and navigating to:
 
    http://localhost:5000
 
@@ -37,10 +60,25 @@ Command breakdown:
 - React frontend
 - IPMI and NVIDIA SMI data monitoring
 - Containerized for easy deployment
+- PostgreSQL database integration
+
+## Prerequisites
+
+- Docker and Docker Compose must be installed on your system
 
 ## Note
 
-This Docker setup pulls the latest code from the GitHub repository, builds the image, and runs the container in a single command. If you need to make local changes, clone the repository first, make your changes, and then use `docker build` and `docker run` separately.
+This Docker Compose setup pulls the latest code from the GitHub repository, builds the image, and runs the containers in a single command. If you need to make local changes, clone the repository first, make your changes, and then modify the `docker-compose.yml` file to use a local build context.
+
+## Troubleshooting
+
+If you encounter any issues with the build process, you can try building the Docker image manually to see more detailed error messages:
+
+```bash
+docker build -t tempman https://github.com/hrtsv/TempMan.git
+```
+
+This will show you the full build output and any potential errors.
 
 ## Contributing
 
