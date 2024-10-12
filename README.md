@@ -80,10 +80,13 @@ If you encounter any issues with the deployment process:
 2. Common issues and solutions:
    - If you see "No requirements.txt found", check the repository structure and ensure the file exists in the backend directory.
    - If you encounter frontend build issues, check the logs to see if the React files were created successfully.
+   - If the app can't connect to the database, ensure the `DATABASE_URL` environment variable is correct and the database container is running.
 
 3. Ensure that port 5000 is not being used by another service on your system.
 
-4. Verify that the PostgreSQL database is running correctly by checking its logs.
+4. Verify that the PostgreSQL database is running correctly by checking its logs:
+   - In Dockge: Look for the "db" service and check its logs.
+   - With Docker Compose: Run `docker-compose logs db`
 
 5. If you need to modify the application:
    - Fork the TempMan repository on GitHub.
