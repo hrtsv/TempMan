@@ -23,9 +23,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
-    command: >
-      -c 'max_connections=200'
-      -c 'shared_buffers=256MB'
 
 volumes:
   postgres_data:

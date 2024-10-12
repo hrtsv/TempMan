@@ -38,9 +38,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
-    command: >
-      -c 'max_connections=200'
-      -c 'shared_buffers=256MB'
 
 volumes:
   postgres_data:
@@ -73,27 +70,6 @@ If you prefer to deploy manually using Docker Compose, follow these steps:
 
 4. Access the application at http://localhost:5000
 
-## Reinitializing the Database
-
-If you need to reinitialize the database (e.g., after schema changes), follow these steps:
-
-1. Stop the running containers:
-   ```bash
-   docker-compose down
-   ```
-
-2. Remove the existing volume:
-   ```bash
-   docker volume rm tempman_postgres_data
-   ```
-
-3. Start the services again:
-   ```bash
-   docker-compose up -d
-   ```
-
-This will create a fresh database volume and reinitialize the database.
-
 ## Troubleshooting
 
 If you encounter any issues with the deployment process:
@@ -107,8 +83,9 @@ If you encounter any issues with the deployment process:
    - With Docker Compose: Run `docker-compose logs db`
 
 3. Common issues and solutions:
+   - If you see "app.py not found in root or backend directory", check the repository structure and ensure the Flask application file is in the correct location.
    - If the app can't connect to the database, ensure the `DATABASE_URL` environment variable is correct and the database container is running.
-   - If you see database-related errors, try reinitializing the database as described above.
+   - If you encounter frontend build issues, check the logs to see if the React files were created successfully.
 
 4. Ensure that port 5000 is not being used by another service on your system.
 
@@ -122,6 +99,13 @@ If you encounter any issues with the deployment process:
        dockerfile: Dockerfile
      ```
    - Redeploy the stack in Dockge or run `docker-compose up -d` again.
+
+6. If you need to reinitialize the database:
+   ```bash
+   docker-compose down
+   docker volume rm tempman_postgres_data
+   docker-compose up -d
+   ```
 
 ## Features
 
