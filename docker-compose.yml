@@ -4,7 +4,7 @@ services:
   tempman:
     build:
       context: https://github.com/hrtsv/TempMan.git#main
-      dockerfile: Dockerfile  # Updated to point to root Dockerfile
+      dockerfile: Dockerfile
     image: tempman:latest
     container_name: tempman
     restart: unless-stopped
@@ -24,6 +24,7 @@ services:
       - DATABASE_URL=postgresql://postgres:${DB_PASSWORD:-yourpassword}@db:5432/tempman
     volumes:
       - tempman_data:/data
+    command: sh -c "python main.py"
 
   db:
     image: timescale/timescaledb:latest-pg14
