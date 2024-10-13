@@ -25,7 +25,8 @@ services:
     volumes:
       - tempman_data:/data
     command: sh -c "find / -maxdepth 3 -type d | sort"
-
+    working_dir: /app
+    command: python main.py
   db:
     image: timescale/timescaledb:latest-pg14
     container_name: tempman_db
