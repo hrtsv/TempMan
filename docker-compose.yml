@@ -25,7 +25,7 @@ services:
     volumes:
       - tempman_data:/data
     working_dir: /app
-    command: python /app/app/main.py
+    command: sh -c "cat /app/app/database.py && echo '---' && cat /app/app/main.py"
   db:
     image: timescale/timescaledb:latest-pg14
     container_name: tempman_db
