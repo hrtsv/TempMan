@@ -25,7 +25,7 @@ services:
     volumes:
       - tempman_data:/data
     working_dir: /app
-    command: sh -c "tail -f /dev/null"  # This keeps the container running
+    command: python /app/app/main.py
   db:
     image: timescale/timescaledb:latest-pg14
     container_name: tempman_db
