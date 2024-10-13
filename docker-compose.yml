@@ -4,6 +4,7 @@ services:
   tempman:
     build:
       context: https://github.com/hrtsv/TempMan.git#main
+      dockerfile: Dockerfile  # Updated to point to root Dockerfile
     image: tempman:latest
     container_name: tempman
     restart: unless-stopped
