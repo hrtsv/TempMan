@@ -24,7 +24,7 @@ services:
       - DATABASE_URL=postgresql://postgres:${DB_PASSWORD:-yourpassword}@db:5432/tempman
     volumes:
       - tempman_data:/data
-    command: sh -c "python main.py"
+    command: sh -c "find / -maxdepth 3 -type d | sort"
 
   db:
     image: timescale/timescaledb:latest-pg14
