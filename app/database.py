@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import declarative_base, sessionmaker
-from sqlalchemy import Column, Integer, Float, DateTime
+from sqlalchemy import Column, Integer, Float, DateTime, String
 from datetime import datetime
 
 DATABASE_URL = "postgresql+asyncpg://postgres:yourpassword@db:5432/tempman"
